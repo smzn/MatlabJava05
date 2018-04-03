@@ -30,11 +30,14 @@ public class MatlabJava05_lib {
 		}
 	}
 	
+	//https://jp.mathworks.com/help/matlab/ref/summary.html
+	//https://jp.mathworks.com/help/matlab/ref/table.html
 	public double[][] getSummary() {
 		double result[][] = new double[3][data[0].length];
 		try {
-			ml.eval("data = table(data(:,:));");
-			ml.eval("s = summary(data);");
+			ml.eval("data = table(data(:,:));"); //table 配列に変換
+			ml.eval("summary(data);");
+			ml.eval("s = summary(data);"); //構造体を取得
 			ml.eval("min = s.Var1.Min");
 			ml.eval("median = s.Var1.Median");
 			ml.eval("max = s.Var1.Max");
