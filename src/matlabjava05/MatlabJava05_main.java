@@ -15,7 +15,8 @@ public class MatlabJava05_main {
 		//csv取り込みここまで
 		
 		MatlabJava05_lib mlib = new MatlabJava05_lib(data); 
-		mlib.getRegression();
+		double [][]summary = mlib.getSummary();
+		System.out.println("Summary = "+Arrays.deepToString(summary));
 	}
 
 }

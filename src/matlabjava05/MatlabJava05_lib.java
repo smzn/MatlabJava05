@@ -21,11 +21,6 @@ public class MatlabJava05_lib {
 		try {
 			ml = eng.get();
 			ml.putVariableAsync("data", data);
-			ml.eval("scatter(data(:,6),data(:,5));");
-			ml.eval("xlabel('Number of House');");
-			ml.eval("ylabel('Population of 80 over');");
-			ml.eval("title('Population of 80 over for house')");
-			ml.eval("pause(5);");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,22 +29,22 @@ public class MatlabJava05_lib {
 			e.printStackTrace();
 		}
 	}
-
-	//6列目:世帯数、5列目:80over
-	public void getRegression() {
+	
+	public double[][] getSummary() {
+		double result[][] = new double[3][data[0].length];
 		try {
-			ml.eval("mdl = fitlm(data(:,6),data(:,5));");
-			ml.eval("yPred = predict(mdl,data(:,6));");
-			ml.eval("plot(data(:,6),data(:,5),'.');");
-			ml.eval("hold on");
-			ml.eval("plot(data(:,6), yPred, '.-');");
-			ml.eval("legend('All Data','Predicted Response');");
-			ml.eval("xlabel('Number of House');");
-			ml.eval("ylabel('Population of 80 over');");
-			ml.eval("title('Population of 80 over for house')");
-			ml.eval("pause(5);");
-			ml.eval("saveas(gcf,'regression.png')");
-			ml.eval("hold off");
+			ml.eval("data = table(data(:,:));");
+			ml.eval("s = summary(data);");
+			ml.eval("min = s.Var1.Min");
+			ml.eval("median = s.Var1.Median");
+			ml.eval("max = s.Var1.Max");
+			Future<double[]> futureEval_min = ml.getVariableAsync("min");
+			result[0] = futureEval_min.get();
+			Future<double[]> futureEval_median = ml.getVariableAsync("median");
+			result[1] = futureEval_median.get();
+			Future<double[]> futureEval_max = ml.getVariableAsync("max");
+			result[2] = futureEval_max.get();
+			
 		} catch (MatlabExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,7 +64,7 @@ public class MatlabJava05_lib {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		return result;
 	}
 	
 }
